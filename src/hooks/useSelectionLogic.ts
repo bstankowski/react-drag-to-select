@@ -1,6 +1,6 @@
 import { RefObject, useCallback, useEffect, useRef } from 'react';
 import throttle from 'lodash.throttle';
-import { MouseSelectionRef, Point, SelectionBox } from '../utils/types';
+import { MouseSelectionRef, Point } from '../utils/types';
 import { calculateBoxArea, calculateSelectionBox } from '../utils/boxes';
 import { isElementDraggable } from '../utils/utils';
 import { UseSelectionContainerParams } from './useSelectionContainer';
@@ -95,13 +95,6 @@ export function useSelectionLogic<T extends HTMLElement>({
           endPoint: endPoint.current,
         });
 
-        // calculate box in context of container to compare with items' coordinates
-        const boxInContainer: SelectionBox = {
-          ...newSelectionBox,
-          top: newSelectionBox.top + (rect?.top || 0),
-          left: newSelectionBox.left + (rect?.left || 0),
-        };
-
         // we detect move only after some small movement
         if (calculateBoxArea(newSelectionBox) > 10) {
           if (!isSelecting.current) {
@@ -111,9 +104,9 @@ export function useSelectionLogic<T extends HTMLElement>({
             isSelecting.current = true;
           }
           containerRef.current?.drawSelectionBox(newSelectionBox);
-          currentSelectionChange.current(boxInContainer);
+          currentSelectionChange.current(newSelectionBox);
         } else if (isSelecting) {
-          currentSelectionChange.current(boxInContainer);
+          currentSelectionChange.current(newSelectionBox);
         }
       } else {
         cancelCurrentSelection();
