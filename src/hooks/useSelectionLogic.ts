@@ -11,8 +11,8 @@ interface UseSelectionLogicResult {
 
 interface UseSelectionLogicParams<T extends HTMLElement>
   extends Pick<
-  UseSelectionContainerParams<T>,
-  'onSelectionChange' | 'onSelectionEnd' | 'onSelectionStart' | 'isEnabled' | 'eventsElement'
+    UseSelectionContainerParams<T>,
+    'onSelectionChange' | 'onSelectionEnd' | 'onSelectionStart' | 'isEnabled' | 'eventsElement'
   > {
   containerRef: RefObject<MouseSelectionRef>;
 }
@@ -134,6 +134,7 @@ export function useSelectionLogic<T extends HTMLElement>({
       if ((e as MouseEvent).button === 0) {
         cancelCurrentSelection();
         document.body.style.removeProperty('userSelect');
+        document.body.style.removeProperty('webkitUserSelect');
 
         eventsElement?.removeEventListener('mousemove', onMouseMove);
         window?.removeEventListener('mouseup', onMouseUp);
@@ -154,6 +155,7 @@ export function useSelectionLogic<T extends HTMLElement>({
 
         // disable text selection for all document
         document.body.style.userSelect = 'none';
+        document.body.style.webkitUserSelect = 'none';
         startPoint.current = getPointFromEvent(e as MouseEvent);
 
         eventsElement?.addEventListener('mousemove', onMouseMove);
