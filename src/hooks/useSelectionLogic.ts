@@ -11,8 +11,8 @@ interface UseSelectionLogicResult {
 
 interface UseSelectionLogicParams<T extends HTMLElement>
   extends Pick<
-    UseSelectionContainerParams<T>,
-    'onSelectionChange' | 'onSelectionEnd' | 'onSelectionStart' | 'isEnabled' | 'eventsElement'
+  UseSelectionContainerParams<T>,
+  'onSelectionChange' | 'onSelectionEnd' | 'onSelectionStart' | 'isEnabled' | 'eventsElement'
   > {
   containerRef: RefObject<MouseSelectionRef>;
 }
@@ -133,8 +133,9 @@ export function useSelectionLogic<T extends HTMLElement>({
       // handle only left button click
       if ((e as MouseEvent).button === 0) {
         cancelCurrentSelection();
-        document.body.style.removeProperty('userSelect');
-        document.body.style.removeProperty('webkitUserSelect');
+
+        document.body.style.userSelect = '';
+        document.body.style.webkitUserSelect = '';
 
         eventsElement?.removeEventListener('mousemove', onMouseMove);
         window?.removeEventListener('mouseup', onMouseUp);
